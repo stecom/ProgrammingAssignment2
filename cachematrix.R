@@ -24,7 +24,18 @@
 ##  For example, if X is a square invertible matrix, 
 ##     then solve(X) returns its inverse
 
-
+## usage:
+##  <var><- makeCacheMatrix(<squad matrix>)
+## test:
+##    source("cachematrix.R")
+##	m1 <- makeCacheMatrix(matrix(c(1:4), nrow=2, ncol=2))
+##    m1$get() 		# get the value
+##    m1$getinv()		#get the value of the cache
+##	cacheSolve(m1)	# get the invert 
+##    m1$getinv()       # check if cache heve been updated
+##    m0 <- matrix(c(1, 0, 2,0 , 0, 0, 1, 0, 2), nrow = 3,  ncol = 3) # matrix non invertilble
+##    det(m0)		# check if determinant is zero
+##    cacheSolve(m0)	# check the error.
 
 makeCacheMatrix <- function(x = matrix()) {
         ## definition of the cache
