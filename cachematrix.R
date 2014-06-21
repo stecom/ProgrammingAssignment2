@@ -49,5 +49,54 @@ makeCacheMatrix <- function(x = matrix()) {
 
 
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+        ######################################
+        ##   fonction checkinv
+        ######################################
+        ##  handle of exception
+	  checkinv<- function(x,trace=FALSE){
+        # return bolean TRUE if matrix x can be inverted
+        # print error message when trace set to TRUE
+	  # the lazy evaluation of booleam in if statement avoid the usage of imbrication of If statemnt
+        
+		  canInv <- TRUE
+		  if (!is.matrix(x)){
+                 canInv <- FALSE
+    		     if (trace) message("Error  : the parameter must be a matrix")
+              }
+  		  if (length( dim(x)) !=2 ){
+                 canInv <- FALSE
+    		     if (trace) message("Error  : the matrix must have a dimension of 2")
+              }
+              if (length( dim(x)) ==2 && (dim(x)[1] != 2 || dim(x)[2] !=2) ){
+                 canInv <- FALSE
+    		     if (trace) message("Error  : the matrix must have a the same number of element in each dimension")
+              }
+              if (mode(x)!="numeric"){
+                 canInv <- FALSE
+    		     if (trace) message("Error  : the element of the  matrix must be numerical")
+              }
+              if (det(x) == 0){
+                 canInv <- FALSE
+    		     if (trace)	message("Error  : matrix can not be inverted, its determinant is null")
+              }
+	        canInv
+	  }
+        ###########################################
+        ## start of Body
+        cache_inv <- x$getinv()		# access the cache
+        if(!is.null(cache_inv)) {
+	          # data are in the cache, no need de calculate
+                message("getting data from Cache")
+        } else {
+ 		   # no data in the cache, calculation required
+               data <- x$get()
+               if (checkinv(data, TRUE)){
+                       # case cache is null, then populate the cache
+                       cache_inv <- solve(data, ...)
+                       x$setinv(cache_inv)
+               }
+	  }   # of if null
+        # return the value of the cache
+        cache_inv
+
 }
